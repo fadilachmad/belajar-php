@@ -1,14 +1,22 @@
 <?php
 
     session_start();
+    require 'functions.php';
 
     if(!isset($_SESSION["login"])) {
         header("Location: login.php");
         exit;
     }
 
-    require 'functions.php';
-    $mahasiswa = query("SELECT * FROM mahasiswa");
+    $jumlahDataPerHalaman = 3;
+    $jumlahData = count(query("SELECT * FROM mahasiswa"));
+    $jumlahHalaman = ceil($jumlahData / $jumlahDataPerHalaman);
+    $halamanAktif = (isset($_GET["halaman"])) ? $_GET["halaman"] : 1;
+
+    $awalData = ($jumlahDataPerHalaman * $halamanAktif) - $jumlahDataPerHalaman;
+    
+    
+    $mahasiswa = query("SELECT * FROM mahasiswa LIMIT $jumlahDataPerHalaman OFFSET $awalData");
 
     if(isset($_POST["cari"])) {
         $mahasiswa = cari($_POST["keyword"]);
@@ -53,6 +61,24 @@
         <?php endforeach ?>
     </table>
 
+    <?php if($halamanAktif > 1) : ?>
+        <a href="?halaman=<?= $halamanAktif - 1; ?>">&lt;</a>
+    <?php endif; ?>
+
+    <?php for($i = 1; $i <= $jumlahHalaman; $i++) : ?>
+        <?php if($i == $halamanAktif) : ?>
+            <a href="?halaman=<?= $i; ?>" style="font-weight: bold; color: red;"><?= $i; ?></a>
+        <?php else : ?>
+            <a href="?halaman=<?= $i; ?>"><?= $i; ?></a>
+        <?php endif; ?>
+    <?php endfor; ?>
+
+    <?php if($halamanAktif < $jumlahHalaman) : ?>
+        <a href="?halaman=<?= $halamanAktif + 1; ?>">&gt;</a>
+    <?php endif; ?>
+    
+    <br>
+    <br>
     <a href="logout.php">Logout</a>
 </body>
 </html>
