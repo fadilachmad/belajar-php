@@ -1,4 +1,12 @@
 <?php
+
+    session_start();
+
+    if(!isset($_SESSION["login"])) {
+        header("Location: login.php");
+        exit;
+    }
+
     require 'functions.php';
     $mahasiswa = query("SELECT * FROM mahasiswa");
 
@@ -16,7 +24,8 @@
 </head>
 <body>
     <h1>Daftar Mahasiswa</h1>
-    <form action="" method="post">
+    <a href="tambah.php">Tambah Mahasiswa</a>
+    <form action="" method="post" style="margin: 20px 0">
         <input type="text" name="keyword" size="40" autofocus placeholder="masukkan keyword pencarian" autocomplete="off">
         <button type="submit" name="cari">Cari</button>
     </form>
@@ -43,5 +52,7 @@
         </tr>
         <?php endforeach ?>
     </table>
+
+    <a href="logout.php">Logout</a>
 </body>
 </html>

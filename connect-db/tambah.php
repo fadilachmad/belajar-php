@@ -1,7 +1,14 @@
 <?php
+    session_start();
+
+    if(!isset($_SESSION["login"])) {
+        header("Location: login.php");
+        exit;
+    }
     require "functions.php";
     
     if(isset($_POST["submit"])){
+
         if(tambah($_POST) > 0) {
            echo "<script>alert('Data berhasil ditambahkan'); document.location.href = 'index.php'; </script>";
         } else {
@@ -19,7 +26,7 @@
 </head>
 <body>
     <h1>Tambah Data Mahasiswa</h1>
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
         <ul>
             <li>
                 <label for="nim">NIM: </label>
@@ -39,7 +46,7 @@
             </li>
             <li>
                 <label for="gambar">Gambar: </label>
-                <input type="text" name="gambar" id="gambar">
+                <input type="file" name="gambar" id="gambar">
             </li>
             <li>
                 <button type="submit" name="submit">Submit Data</button>

@@ -1,4 +1,10 @@
 <?php
+    session_start();
+
+    if(!isset($_SESSION["login"])) {
+        header("Location: login.php");
+        exit;
+    }
     require "functions.php";
 
     $id = $_GET["id"];
@@ -23,10 +29,11 @@
 </head>
 <body>
     <h1>Ubah Data Mahasiswa</h1>
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
         <ul>
             <li>
                 <input type="hidden" name="id" value="<?php echo $mhs["id"]; ?>">
+                <input type="hidden" name="gambarLama" value="<?php echo $mhs["gambar"]; ?>">
             </li>
             <li>
                 <label for="nim">NIM: </label>
@@ -45,8 +52,9 @@
                 <input type="text" name="email" id="email" value="<?php echo $mhs["email"]; ?>">
             </li>
             <li>
-                <label for="gambar">Gambar: </label>
-                <input type="text" name="gambar" id="gambar" value="<?php echo $mhs["gambar"]; ?>">
+                <label for="gambar">Gambar: </label> <br>
+                <img src="img/<?php echo $mhs['gambar']; ?>" width="40"  alt=""> <br>
+                <input type="file" name="gambar" id="gambar" ?>
             </li>
             <li>
                 <button type="submit" name="submit">Submit Data</button>
